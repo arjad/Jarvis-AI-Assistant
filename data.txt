@@ -1,0 +1,5 @@
+name= muhammad zakria
+father=abdul hameed
+country=
+city= Kasur
+age=

@@ -1,0 +1,375 @@
+# import nltk.chat.until 
+# from nltk.chat.until import Chat, reflections
+from GoogleNews import GoogleNews  # importing and installing google newsmodule
+import pyttsx3 
+import requests 
+import json 
+import time 
+import pyttsx3 # voice import
+import datetime   # date import
+import speech_recognition as sr  # to speak
+from colorama import Fore, Back, Style 
+import wikipedia   #to search on internet
+import matplotlib.image as mpimg # display image
+import matplotlib.pyplot as plt #display image
+import webbrowser   #to opening webpages
+import os   # to search in windows
+from datetime import date # to get date
+import smtplib   # to send mail
+
+
+            
+            ## ---- sheraz part--------
+            ##--------------------------
+que=[ 
+    ['my name is arjad', ['hi arjad']],
+]
+im = mpimg.imread('robot.png')   # print image
+plt.imshow(im)
+print('OSCAR started Operating')
+    
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices') # get voice 
+
+
+engine.setProperty('voice', voices[1].id)
+# 0 for male david
+# 1 for female hazel
+# print(voices[1].id)
+
+def speak(audio):      #functiion to speak
+    engine.say(audio) # to speal
+    print(audio)
+    engine.runAndWait()  # to wait until speach end
+
+def intro():
+    h = int(datetime.datetime.now().hour)
+#     print(h)
+    speak("Hello")
+    
+    if h>=0 and h<12:
+        speak("Good Moring")
+#         print("Good Morning")
+    
+    elif h>=12 and h<18:
+        speak("Good Afternoon")
+#         print("Good Afternoon")
+    elif h>=18 and h<25:
+        speak("Good Evening")
+#         print("Good Evening")
+
+
+    ## ---- zakria part--------
+    ##--------------------------
+
+#####################data in files################################
+#####################data in files################################
+#####################data in files################################
+##################################################
+def printVal(a):#search personal info from file
+    f = open("data.txt",'r')   # open file to read
+    for x in f:
+        x=x.split('=')   # split the line
+        if x[0]==a:  
+            return x[1]  # return next to =
+
+def writeData(data,value): #write personal data
+    search_string = data
+    file_content = open('data.txt','r+')
+    lines = []
+    flag = 0
+    for line in file_content:
+        line = line.lower()
+        stripped_line = line
+        if search_string in line:
+            flag = 1
+            stripped_line = line.strip('\n')+' '+value+ '\n'    
+        lines.append(stripped_line)
+    file_content.close()
+    if (flag == 1):
+        file_content = open('data.txt','w')
+        file_content.writelines(lines)
+        file_content.close()
+        
+        ############\\
+        #######
+        
+                 
+            ## ---- arjad part--------
+            ##--------------------------
+
+def listen():
+    r = sr.Recognizer()    #listen voice
+    with sr.Microphone() as source: 
+        print(Back.YELLOW + "Listening your voice....... ")
+        r.pause_threshold = 1     #pause until speech is completed
+        r.energy_threshold = 500  
+        audio = r.listen(source)
+        
+    try:
+        print(Back.YELLOW +"processing")
+        print(Style.RESET_ALL) 
+        query = r.recognize_google(audio, language="en-in")    #recognize voice through google
+        print(Fore.GREEN + f" You : {query}")
+        print(Style.RESET_ALL) 
+        
+    except Exception as ex:         #
+        print(ex)
+        return "None"   #in case of no recognintion
+    return query
+
+def mail(to,msg):
+    server = smtplib.SMTP(smtp.gmail.com,587)   # compulsory port no
+    server.ehlo()
+#    print('in func')
+
+    server.starttls()
+
+    server.login('ahmadbut3637@gmail.com','imgenious')  # our email +pass
+    server.sendmail(to, msg)   # mail sent
+    server.close() #end
+
+######################
+######################
+
+if __name__ ==  "__main__":
+    intro()
+    #if 1:
+    while True:
+        com = listen().lower()     #to convert in lower case (to find excat keywords)
+
+        
+######################################################
+
+        if 'wikipedia' in com: 
+            print(" searching on wikipedia ... ")
+            com = com.replace("wikipedia", "" )
+            results = wikipedia.summary(com, sentences= 2)  
+            speak("according to internet and wikipedia")
+            speak(results)
+#             print(results)
+######################################################
+
+        if 'open youtube' in com:
+            speak("opening youtube")
+            webbrowser.open('youtube.com')
+######################################################
+        if 'open google' in com:
+            speak("opening google")
+            webbrowser.open('google.com')
+######################################################
+        if 'open facebook' in com:
+            speak("opening facebook")
+            webbrowser.open('facebook.com')
+######################################################
+        if 'open instagram' in com:
+            speak("opening instagram")
+            webbrowser.open('instagram.com')
+######################################################
+        if 'play music' in com:
+            musicpath = 'C:\\Users\\arjad\\OneDrive\\Desktop\Songs' 
+            song_list = os.listdir(musicpath) # make array of songs 
+#             print(song_list)
+            os.startfile(os.path.join(musicpath,song_list[0]))   # to start
+######################################################
+        if 'time' in com:
+            t = date.today()
+            speak(f'Boss! its {t}')
+            
+######################################################
+        if 'date' in com:
+            today = date.today()
+            d = today.strftime("%B %d, %Y")
+            speak(f'Boss! its {d} today ')
+            
+        if 'open visual code' in com:
+            paths= '"C:\\Program Files\\Microsoft VS Code\\Code.exe"'
+            os.startfile(paths)
+        if 'open chrome' in com:
+            paths= '""C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe""'
+            os.startfile(paths)
+        
+######################eailing with you passwor################################
+        if 'email to harry' in com:
+            try:
+                speak('speak the message loudly that you want to send')
+                msg= listen()            
+                mail('arjadgohar14@gmail.com',msg)   # function ti send mail
+                speak('Boss! Your Email has been sent ')
+            
+            except Exception as ex:
+                print(ex)
+                speak('Sorry! there is an error in sending emai, may be slow internet \n')
+#####################seach from google#################################
+        
+        if 'search google' in com:
+            print(" searching on google ... ")
+            speak('speak what you want to seach on google')
+            query= listen()            
+                
+            try: 
+                from googlesearch import search    #importing google
+            except ImportError as ex:
+                print(ex)
+                print("No module named 'google' found") 
+  
+            for j in search(query, tld="co.in", lang='en', num=20, stop=10, pause=2): 
+# tld = co in means in google.com or gogle.in
+# num= 20 means 20 results
+                print(j) 
+                speak('your google results are on your screen. right now')
+######################calculator################################
+
+        if 'open calculator' in com:
+            speak("calulator is opened")
+            def add(x, y):
+                return x + y
+
+            def subtract(x, y):
+                return x - y
+
+            def multiply(x, y):
+                return x * y
+
+            def divide(x, y):
+                return x / y
+
+            print("Select operation.")
+            print("1->Add\n2->Subtract\n3->Multiply\n4->Divide")
+
+            while True:
+                choice = input("Enter choice: ")
+
+                if choice in ('1', '2', '3', '4'):
+                    num1 = float(input("Enter first number: "))
+                    num2 = float(input("Enter second number: "))
+
+                if choice == '1':
+                    print('ANSWER = ', num1, "+", num2, "=", add(num1, num2))
+
+                elif choice == '2':
+                    print('ANSWER = ', num1, "-", num2, "=", subtract(num1, num2))
+
+                elif choice == '3':
+                    print('ANSWER = ', num1, "*", num2, "=", multiply(num1, num2))
+
+                elif choice == '4':
+                    print('ANSWER = ', num1, "/", num2, "=", divide(num1, num2))
+                    break
+                else:
+                    print("Wrong Input")
+        
+#####################news from internet###########################
+        if 'tel news' in com:
+            googlenews = GoogleNews()  
+            googlenews = GoogleNews('en', 'd')   # set language
+           
+            speak("speak what you want to search on news")
+            query= listen()            
+                
+            ################## 
+            googlenews.search(query)     # search word to search
+            
+            googlenews.getpage(1)   # set page to display
+
+            googlenews.result()
+            googlenews.gettext()  # print text from that page
+            
+            
+             ## ---- zakria part-------
+            ##--------------------------
+
+
+        ##########################################3
+        if 'my name' in com:
+            if printVal("name") =='\n':
+                speak("sorry!! i don't know about your name please enter your name:")
+                value=listen()
+                writeData('name=',value)  
+                speak("Thanks!!! your Name is updated")
+            speak(printVal("name"))
+        if 'my father name' in  com:
+            if printVal("name") =='':
+                speak("sorry!! i don't know about your father's  name please enter your Father's  name:")
+                value=listen()
+                writeData('father=',value)
+                speak("Thanks!!! your Father's Name is updated")
+            speak(printVal("father"))
+
+        if 'my country name' in  com:
+            if printVal("country") =='':
+                speak("sorry!! i don't know about your country's  name please enter your country's   name:")
+                value=listen()
+                writeData('country=',value)
+                speak("Thanks!!! your country's 's Name is updated")
+            speak(printVal("country"))
+                        
+        if 'my city name' in  com:
+            if printVal("city") =='':
+                speak("sorry!! i don't know about your city's  name please enter your city's  name:")
+                value=listen()
+                writeData('city=',value)
+                speak("Thanks!!! your city's Name is updated")
+            speak(printVal("city"))
+
+        if 'my age' in  com:
+            if printVal("age") =='':
+                speak("sorry!! i don't know about your age please enter your age  name:")
+                value=listen()
+                writeData('age=',value)
+                speak("Thanks!!! your age  is updated")
+            speak(printVal("age"))
+                        
+
+################### common ques ###################################
+
+        if 'hello' in com:
+            speak("how are you? sir")
+            com = listen().lower() 
+            if 'fine' in com :
+                speak('happy! to listen that! if you are interested i can sing a song for you  \n')
+                musicpath = 'C:\\Users\\arjad\\OneDrive\\Desktop\Songs' # path should have double slash
+                song_list = os.listdir(musicpath) # make array of songs in that folder
+#                 print(song_list)
+                os.startfile(os.path.join(musicpath,song_list[0]))   # to start
+                
+            elif 'not' in com:
+                speak(' I am Sorry to hear that! i hope you get well soon😢  \n')
+            
+        if 'your name' in com:
+            speak("My name is Oscar ")
+        if 'your introduction' in com:
+            speak("My name is Oscar ")
+        if 'your age' in com:
+            speak(" I am a computer program , so i have no age ")
+        if 'your gender' in com:
+            speak(" I am a computer program , so i have no gender ")
+        if 'who are you' in com:
+            speak("i am Oscar. Your personal AI assistant, Created by afforts of Zakria, Arjad and Sheraz. ")
+        if 'tell me about you' in com:
+            speak("i am Oscar. Your personal AI assistant, Created by afforts of Zakria, Arjad and Sheraz. ")
+        if 'what can you do' in com:
+            speak("i can answer basic questions. i can send mail. i can play music, open browser. ican also seach anything on wikipedia ")
+        if 'tell joke' in com:
+            speak("What did the left eye say to the right eye?      Between us, something smells!")
+        if 'oscar' in com:
+            speak('yes boss! how may I help you?')
+        if 'tell me a joke' in com:
+            speak('haha ok, once there were two women in jail , completly quit .... and they died haha')
+        if 'bye' in com:
+            print('shutting down')
+            speak("By dear, Have a nice day   , i will go offline :-) ")
+            break
+        if 'by' in com:
+            print('shutting down')
+            speak("By dear, Have a nice day   , i will go offline :-) ")
+            break
+        if 'shutdown' in com:
+            print('shutting down')
+            speak("By dear, Have a nice day   , i will go offline :-) ")
+            break
+        if 'you go' in com:
+            print('shutting down')
+            speak("By dear, Have a nice day :-) ")
+            break
+            
